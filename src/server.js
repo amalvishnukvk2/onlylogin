@@ -6,22 +6,28 @@ require("dotenv").config();
 
 const app = express();
 
+// CORS configuration
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://onlylogin-front.vercel.app",
+];
 
-// Middleware
 app.use(cors({
-  origin: ["http://localhost:5173", "https://onlylogin-eg5e.onrender.com"]
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
 app.use(express.json());
 
-// Test route
-app.use('/api/v1/auth', require('./routes/auth'));  
+// Authentication routes
+app.use("/api/v1/auth", require("./routes/auth"));
 
-
-
+// Connect to MongoDB
 connectDB();
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
